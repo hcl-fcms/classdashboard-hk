@@ -423,23 +423,35 @@ body.bpmf .dc .dn{display:none}
 .pk-row b{font-family:var(--mono);color:var(--gold);font-weight:600}
 .pk-toggle{height:40px;padding:0 18px;border-radius:20px;border:1px solid rgba(170,220,230,.3);background:rgba(0,0,0,.2);color:rgba(241,245,244,.8);font-size:17px;letter-spacing:.08em}
 .pk-toggle.on{border-color:var(--energy);color:var(--energy);background:rgba(112,214,189,.12)}/* ---------- 乘數表紀錄 ---------- */
-.tt-sum{margin-top:12px;font-size:17px;color:rgba(241,245,244,.7)}
-.tt-sum b{font-family:var(--mono);color:var(--gold);font-weight:600}
-.tt-wrap{width:100%;margin-top:14px;max-height:44vh;overflow:auto;border:1px solid rgba(170,220,230,.14);border-radius:16px;background:rgba(7,27,44,.45)}
-table.tt{table-layout:fixed;border-collapse:separate;border-spacing:3px;width:100%;font-size:14px}
-.tt th{font:600 13px var(--mono);color:rgba(241,245,244,.6);padding:6px 4px;background:#0c2638}
+#ui.tables-view{transform:none!important;width:100vw!important;height:100dvh!important}
+#ui.tables-view #tabs{left:12px;top:8px;width:calc(100vw - 24px);height:60px;z-index:40;gap:4px}
+#ui.tables-view #tabs .tab{font-size:clamp(14px,2vw,22px);height:60px;letter-spacing:0;background:#17394c;color:#fff}
+#ui.tables-view #tabs .tab.on{background:#8be4cd;color:#05282c}
+#ui.tables-view #tabs .tab svg{display:none}
+#ui.tables-view #centerPanel{left:12px;top:68px;width:calc(100vw - 24px);height:calc(100dvh - 80px);transform:none!important;z-index:39;background:#0c2638;transition:none}
+#ui.tables-view #centerBody{padding:20px;align-items:stretch;overflow:hidden}
+#ui.tables-view #taskPanel,#ui.tables-view #ambPanel{visibility:hidden}
+.tt-title{margin:0;color:#fff;font:700 clamp(26px,3vw,40px) var(--sans);line-height:1.3}
+.tt-sum{margin-top:10px;font-size:20px;line-height:1.5;color:#edf7fa}
+.tt-sum b{color:#ffe199;font-weight:700}
+.tt-wrap{width:100%;min-height:0;flex:1;margin-top:16px;overflow:auto;border:2px solid #7598aa;border-radius:14px;background:#f3f8fb;overscroll-behavior:contain}
+table.tt{table-layout:fixed;border-collapse:separate;border-spacing:5px;width:100%;min-width:960px;font-size:24px}
+.tt th{font:700 26px var(--sans);color:#fff;padding:12px 4px;background:#183f54}
 .tt thead th{position:sticky;top:0;z-index:2}
-.tt .tt-seat{position:sticky;left:0;z-index:1;min-width:54px;color:var(--gold)}
+.tt .tt-seat{position:sticky;left:0;z-index:1;color:#fff}
 .tt thead .tt-seat{z-index:3}
-.tt tbody th small{display:block;font-size:10px;color:rgba(112,214,189,.75);font-weight:500;margin-top:2px}
+.tt tbody th{font-size:32px}
+.tt tbody th small{display:block;font-size:16px;color:#fff;font-weight:500;margin-top:5px}
 .tt td{padding:0}
-.tt-cell{width:100%;min-height:36px;border:1px solid rgba(170,220,230,.1);border-radius:9px;background:rgba(10,32,48,.5);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1;padding:4px 2px;color:rgba(241,245,244,.28)}
-.tt-cell:hover{border-color:rgba(112,214,189,.55);color:rgba(241,245,244,.55)}
-.tt-cell svg{width:15px;height:15px;color:var(--energy)}
-.tt-cell .tt-date{font:500 9px var(--mono);color:rgba(241,245,244,.45)}
-.tt-cell.on{background:rgba(112,214,189,.14);border-color:rgba(112,214,189,.5)}
-.tt-cell:disabled{opacity:.25;cursor:not-allowed}
-.tt tfoot td{font:600 13px var(--mono);color:rgba(112,214,189,.8);padding:5px 0;background:#0c2638}
+.tt-cell{width:100%;min-height:76px;border:2px solid #7a96a6;border-radius:12px;background:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;line-height:1.2;padding:8px 3px;color:#344f60;font:700 22px var(--sans)}
+.tt-cell:hover{border-color:#135b49;box-shadow:inset 0 0 0 2px #135b49}
+.tt-cell:focus-visible{outline:4px solid #cf6410;outline-offset:1px}
+.tt-cell svg{width:26px;height:26px;color:#105441}
+.tt-cell .tt-date{font:600 16px var(--sans);color:#154f40}
+.tt-cell.on{background:#d5f5e5;border-color:#20755a;color:#105441}
+.tt-cell:disabled{background:#e2e8ed;color:#526572;cursor:not-allowed}
+.tt tfoot td{font:700 24px var(--sans);color:#173f54;text-align:center;padding:12px 0;background:#dceaf2}
+@media(max-width:600px){#ui.tables-view #centerBody{padding:12px}.tt-sum{font-size:18px}.tt-wrap{margin-top:10px}}
 .pk-hist{display:flex;flex-wrap:nowrap;gap:8px;justify-content:center;align-items:center;margin-top:16px;min-height:38px;max-width:100%;overflow:hidden}
 .pk-hist span{font:600 18px var(--mono);padding:5px 12px;border-radius:99px;border:1px solid rgba(170,220,230,.22);color:rgba(241,245,244,.75)}
 .pk-hist span.last{border-color:var(--gold);color:var(--gold);background:rgba(242,182,93,.12)}
@@ -2109,6 +2121,7 @@ function renderCenter(force) {
   if (!force && key === centerKey) return;
   const swap = centerKey.split('|')[0] !== m || centerKey.split('|')[1] !== key.split('|')[1];
   centerKey = key;
+  $('#ui').classList.toggle('tables-view', m === 'tables');
   const host = $('#centerBody');
   host.innerHTML = m === 'clock' ? clockViewHTML() : m === 'homework' ? hwViewHTML() : m === 'tables' ? tablesHTML() : m === 'picker' ? pickerHTML() : act ? runViewHTML() : m === 'focus' ? focusIdleHTML() : pomoIdleHTML();
   if (swap) { host.classList.remove('swap'); void host.offsetWidth; host.classList.add('swap'); }
@@ -2197,16 +2210,16 @@ const tablesHTML = () => {
     const seat = i + 1, m = rec[seat] || {}, empty = isEmptySeat(seat), cnt = ttCount(seat);
     const cells = TT_TABLES.map(t => {
       const on = m[t];
-      return `<td><button class="tt-cell ${on ? 'on' : ''}" data-act="ttCell" data-seat="${seat}" data-tbl="${t}"${empty ? ' disabled' : ''} title="${empty ? '空座位' : on ? `${pad(seat)} 號：×${t} 已通過（${on}），再撳可以取消` : `${pad(seat)} 號：×${t} 未通過`}">${on ? `${ic('check')}<span class="tt-date">${on.slice(5)}</span>` : '·'}</button></td>`;
+      return `<td><button class="tt-cell ${on ? 'on' : ''}" data-act="ttCell" data-seat="${seat}" data-tbl="${t}"${empty ? ' disabled' : ''} aria-pressed="${!!on}" aria-label="${pad(seat)}號，${t}的乘數表，${on ? '已通過' : '未背'}" title="${empty ? '空座位' : on ? `${pad(seat)} 號：×${t} 已通過（${on}），再撳可以取消` : `${pad(seat)} 號：×${t} 未通過`}">${empty ? '空座' : on ? `<span>✓ 已通過</span><span class="tt-date">${on.slice(5).replace('-', '月')}日</span>` : '未背'}</button></td>`;
     }).join('');
-    return `<tr><th class="tt-seat">${pad(seat)}<small>${empty ? '空座' : cnt + '/8'}</small></th>${cells}</tr>`;
+    return `<tr><th class="tt-seat">${pad(seat)}<small>${empty ? '空座' : '已背 ' + cnt + ' 張'}</small></th>${cells}</tr>`;
   }).join('');
   const colCnt = TT_TABLES.map(t => state.students.reduce((a, _, i) => a + ((rec[i + 1] || {})[t] ? 1 : 0), 0));
-  return `<div class="kicker mt"><span class="dot"></span>背誦紀錄　·　${escapeHTML(c.name)}</div>
-    <div class="tt-sum">×2 至 ×9 逐個核對，撳一下記錄通過日期；已背齊 <b>${full}</b> 位　·　唔想留紀錄就再撳一次取消</div>
-    <div class="tt-wrap"><table class="tt">
-      <colgroup><col style="width:64px">${TT_TABLES.map(() => '<col>').join('')}</colgroup>
-      <thead><tr><th class="tt-seat">座號</th>${TT_TABLES.map(t => `<th>×${t}</th>`).join('')}</tr></thead>
+  return `<h1 class="tt-title">${escapeHTML(c.name)}｜乘數表挑戰</h1>
+    <div class="tt-sum">目標：背熟 2 至 9 的乘數表！　已背齊：<b>${full} 位</b><br>老師聽完再按「未背」→「✓ 已通過」。再按一次可取消。左右滑動可看其他乘數表。</div>
+    <div class="tt-wrap"><table class="tt" aria-label="各座號乘數表背誦紀錄">
+      <colgroup><col style="width:108px">${TT_TABLES.map(() => '<col>').join('')}</colgroup>
+      <thead><tr><th class="tt-seat">座號</th>${TT_TABLES.map(t => `<th scope="col">${t} 的表</th>`).join('')}</tr></thead>
       <tbody>${rows}</tbody>
       <tfoot><tr><th class="tt-seat">已背</th>${colCnt.map(n => `<td>${n}</td>`).join('')}</tr></tfoot>
     </table></div>`;
