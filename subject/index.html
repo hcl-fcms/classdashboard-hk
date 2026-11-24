@@ -350,11 +350,11 @@ body.bpmf .dc .dn{display:none}
 
 /* 分頁 */
 /* 分頁列與中央面板同寬，五個分頁平均分配，不會超出面板 */
-#tabs{position:absolute;left:636px;top:158px;width:728px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
-.tab{height:62px;padding:0 8px;border-radius:20px 20px 0 0;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;font:500 21px var(--sans);letter-spacing:.08em;color:rgba(241,245,244,.8);
+#tabs{position:absolute;left:636px;top:158px;width:728px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.tab{height:62px;padding:0 4px;border-radius:20px 20px 0 0;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;font:500 18px var(--sans);letter-spacing:.05em;color:rgba(241,245,244,.8);
   background:rgba(10,32,48,.75);border:1px solid rgba(170,220,230,.14);border-bottom:none;transition:background .3s,color .3s}
 .tab:hover{color:#fff}
-.tab svg{width:26px;height:26px}
+.tab svg{width:22px;height:22px}
 .tab.on{background:linear-gradient(180deg,#8be4cd,#5fc2ab);color:#05282c}
 
 /* 中央面板 */
@@ -422,7 +422,24 @@ body.bpmf .dc .dn{display:none}
 .pk-row{display:flex;align-items:center;gap:18px;margin-top:14px;font-size:20px;color:rgba(241,245,244,.7)}
 .pk-row b{font-family:var(--mono);color:var(--gold);font-weight:600}
 .pk-toggle{height:40px;padding:0 18px;border-radius:20px;border:1px solid rgba(170,220,230,.3);background:rgba(0,0,0,.2);color:rgba(241,245,244,.8);font-size:17px;letter-spacing:.08em}
-.pk-toggle.on{border-color:var(--energy);color:var(--energy);background:rgba(112,214,189,.12)}
+.pk-toggle.on{border-color:var(--energy);color:var(--energy);background:rgba(112,214,189,.12)}/* ---------- 乘數表紀錄 ---------- */
+.tt-sum{margin-top:12px;font-size:17px;color:rgba(241,245,244,.7)}
+.tt-sum b{font-family:var(--mono);color:var(--gold);font-weight:600}
+.tt-wrap{width:100%;margin-top:14px;max-height:44vh;overflow:auto;border:1px solid rgba(170,220,230,.14);border-radius:16px;background:rgba(7,27,44,.45)}
+table.tt{table-layout:fixed;border-collapse:separate;border-spacing:3px;width:100%;font-size:14px}
+.tt th{font:600 13px var(--mono);color:rgba(241,245,244,.6);padding:6px 4px;background:#0c2638}
+.tt thead th{position:sticky;top:0;z-index:2}
+.tt .tt-seat{position:sticky;left:0;z-index:1;min-width:54px;color:var(--gold)}
+.tt thead .tt-seat{z-index:3}
+.tt tbody th small{display:block;font-size:10px;color:rgba(112,214,189,.75);font-weight:500;margin-top:2px}
+.tt td{padding:0}
+.tt-cell{width:100%;min-height:36px;border:1px solid rgba(170,220,230,.1);border-radius:9px;background:rgba(10,32,48,.5);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1;padding:4px 2px;color:rgba(241,245,244,.28)}
+.tt-cell:hover{border-color:rgba(112,214,189,.55);color:rgba(241,245,244,.55)}
+.tt-cell svg{width:15px;height:15px;color:var(--energy)}
+.tt-cell .tt-date{font:500 9px var(--mono);color:rgba(241,245,244,.45)}
+.tt-cell.on{background:rgba(112,214,189,.14);border-color:rgba(112,214,189,.5)}
+.tt-cell:disabled{opacity:.25;cursor:not-allowed}
+.tt tfoot td{font:600 13px var(--mono);color:rgba(112,214,189,.8);padding:5px 0;background:#0c2638}
 .pk-hist{display:flex;flex-wrap:nowrap;gap:8px;justify-content:center;align-items:center;margin-top:16px;min-height:38px;max-width:100%;overflow:hidden}
 .pk-hist span{font:600 18px var(--mono);padding:5px 12px;border-radius:99px;border:1px solid rgba(170,220,230,.22);color:rgba(241,245,244,.75)}
 .pk-hist span.last{border-color:var(--gold);color:var(--gold);background:rgba(242,182,93,.12)}
@@ -931,7 +948,7 @@ img.px{image-rendering:pixelated;image-rendering:crisp-edges;width:100%;height:1
       <button class="tab" data-tab="clock"><i data-ic="clock"></i>現在時間</button>
       <button class="tab" data-tab="focus"><i data-ic="hourglass"></i>倒數</button>
       <button class="tab" data-tab="pomodoro"><i data-ic="tomato"></i>番茄鐘</button>
-      <button class="tab" data-tab="homework"><i data-ic="check"></i>任務</button>
+      <button class="tab" data-tab="homework"><i data-ic="check"></i>任務</button>      <button class="tab" data-tab="tables"><i data-ic="chart"></i>乘數表</button>
       <button class="tab" data-tab="picker"><i data-ic="dice"></i>抽號</button>
     </div>
     <div id="centerPanel" class="panel pe"><div id="centerBody"></div></div>
@@ -1099,7 +1116,7 @@ const validSp = id => isNewSp(id) || !!SP_RARITY[id];
 const freshClassFish = (no = 1) => ({ no, food: 0, eaten: 0, evolved: false, species: null, rarity: null, evolvedAt: null, born: Date.now(), carry: 0 });
 const freshFish = () => ({ hatched: false, hatchedAt: null, food: 0, eaten: 0, evolved: false, species: null, rarity: null, evolvedAt: null });
 const freshHwFish = (target = N) => ({ food: 0, target, evolved: false, species: null, rarity: null, evolvedAt: null });
-const freshStudent = i => ({ seat: i + 1, checked: false, records: [], fish: freshFish() });
+const freshStudent = i => ({ seat: i + 1, checked: false, records: [], fish: freshFish() });const TT_TABLES = [2, 3, 4, 5, 6, 7, 8, 9];
 function defaultState() {
   return {
     v: 5, mode: 'clock', coins: 0,
@@ -1111,7 +1128,7 @@ function defaultState() {
     timer: { duration: 20 * 60000, remaining: 20 * 60000, endAt: null, status: 'idle', kind: 'focus', phase: 'work', round: 1 },
     homework: { title: '今日任務', deadline: Date.now() + 60 * 60000, fish: freshHwFish() },
     hwHistory: [],
-    round: { achieved: false },
+    round: { achieved: false },    tables: {},
     students: Array.from({ length: N }, (_, i) => freshStudent(i))
   };
 }
@@ -1159,14 +1176,16 @@ function sanitize(d) {
   s.homework.fish.target = clamp(parseInt(s.homework.fish.target) || 30, 1, 999);
   s.hwHistory = Array.isArray(d.hwHistory) ? d.hwHistory : [];
   s.round = Object.assign({ achieved: false }, d.round || {});
-  if (!['focus', 'pomodoro', 'clock', 'homework', 'picker'].includes(s.mode)) s.mode = 'clock';
+  if (!['focus', 'pomodoro', 'clock', 'homework', 'tables', 'picker'].includes(s.mode)) s.mode = 'clock';
   s.leftTab = ['sched', 'notes', 'days'].includes(d.leftTab) ? d.leftTab : 'notes';
   s.schedText = typeof d.schedText === 'string' ? d.schedText.slice(0, 4000) : '';
   s.countdowns = Array.isArray(d.countdowns) ? d.countdowns.filter(c => c && c.name && /^\d{4}-\d{2}-\d{2}$/.test(c.date)).slice(0, 10) : [];
   s.notes = Array.isArray(d.notes) ? d.notes.filter(n => n && typeof n.t === 'string').slice(0, 30) : [];
   s.weather = Object.assign({ place: 0, data: null, at: 0, dataPlace: -1, err: false }, d.weather || {}); s.weather.place = clamp(parseInt(s.weather.place) || 0, 0, 17);
   s.missions = d.missions; s.missionIdx = d.missionIdx;
-  s.emptySeats = Array.isArray(d.emptySeats) ? [...new Set(d.emptySeats.filter(n => Number.isInteger(n) && n >= 1 && n <= 50))].sort((a, b) => a - b) : [];
+  s.emptySeats = Array.isArray(d.emptySeats) ? [...new Set(d.emptySeats.filter(n => Number.isInteger(n) && n >= 1 && n <= 50))].sort((a, b) => a - b) : [];  s.tables = {};
+  const ttSrc = (d.tables && typeof d.tables === 'object' && !Array.isArray(d.tables)) ? d.tables : {};
+  Object.keys(ttSrc).forEach(k => { const seat = +k; if (!(seat >= 1 && seat <= 50)) return; const src = ttSrc[k]; if (!src || typeof src !== 'object') return; const m = {}; TT_TABLES.forEach(t => { if (typeof src[t] === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(src[t])) m[t] = src[t]; }); if (Object.keys(m).length) s.tables[seat] = m; });
   s.picker = Object.assign({ noRepeat: true, drawn: [] }, d.picker || {}); if (!Array.isArray(s.picker.drawn)) s.picker.drawn = [];
   s.pomo = Object.assign(defaultState().pomo, d.pomo || {});
   s.ambient = Object.assign(defaultState().ambient, d.ambient || {});
@@ -2091,7 +2110,7 @@ function renderCenter(force) {
   const swap = centerKey.split('|')[0] !== m || centerKey.split('|')[1] !== key.split('|')[1];
   centerKey = key;
   const host = $('#centerBody');
-  host.innerHTML = m === 'clock' ? clockViewHTML() : m === 'homework' ? hwViewHTML() : m === 'picker' ? pickerHTML() : act ? runViewHTML() : m === 'focus' ? focusIdleHTML() : pomoIdleHTML();
+  host.innerHTML = m === 'clock' ? clockViewHTML() : m === 'homework' ? hwViewHTML() : m === 'tables' ? tablesHTML() : m === 'picker' ? pickerHTML() : act ? runViewHTML() : m === 'focus' ? focusIdleHTML() : pomoIdleHTML();
   if (swap) { host.classList.remove('swap'); void host.offsetWidth; host.classList.add('swap'); }
   if (m === 'focus' && !act) initPicker();
   if (m === 'homework') renderHwTank();
@@ -2167,7 +2186,42 @@ function setEnergy(p) {
   document.documentElement.style.setProperty('--liq', `rgb(${a.map((v, i) => Math.round(lerp(v, b[i], k))).join(',')})`);
 }
 
-const TAB_IDS = ['clock', 'focus', 'pomodoro', 'homework', 'picker'];
+/* ---------- 乘數表紀錄：老師逐位核對背誦，2 至 9，記錄通過日期 ---------- */
+const hkToday = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Hong_Kong' });
+const ttRec = () => state.tables || (state.tables = {});
+const ttCount = seat => { const m = ttRec()[seat] || {}; return TT_TABLES.filter(t => m[t]).length; };
+const tablesHTML = () => {
+  const c = curClass(), rec = ttRec();
+  const full = state.students.reduce((a, _, i) => a + (!isEmptySeat(i + 1) && ttCount(i + 1) === TT_TABLES.length ? 1 : 0), 0);
+  const rows = state.students.map((_, i) => {
+    const seat = i + 1, m = rec[seat] || {}, empty = isEmptySeat(seat), cnt = ttCount(seat);
+    const cells = TT_TABLES.map(t => {
+      const on = m[t];
+      return `<td><button class="tt-cell ${on ? 'on' : ''}" data-act="ttCell" data-seat="${seat}" data-tbl="${t}"${empty ? ' disabled' : ''} title="${empty ? '空座位' : on ? `${pad(seat)} 號：×${t} 已通過（${on}），再撳可以取消` : `${pad(seat)} 號：×${t} 未通過`}">${on ? `${ic('check')}<span class="tt-date">${on.slice(5)}</span>` : '·'}</button></td>`;
+    }).join('');
+    return `<tr><th class="tt-seat">${pad(seat)}<small>${empty ? '空座' : cnt + '/8'}</small></th>${cells}</tr>`;
+  }).join('');
+  const colCnt = TT_TABLES.map(t => state.students.reduce((a, _, i) => a + ((rec[i + 1] || {})[t] ? 1 : 0), 0));
+  return `<div class="kicker mt"><span class="dot"></span>背誦紀錄　·　${escapeHTML(c.name)}</div>
+    <div class="tt-sum">×2 至 ×9 逐個核對，撳一下記錄通過日期；已背齊 <b>${full}</b> 位　·　唔想留紀錄就再撳一次取消</div>
+    <div class="tt-wrap"><table class="tt">
+      <colgroup><col style="width:64px">${TT_TABLES.map(() => '<col>').join('')}</colgroup>
+      <thead><tr><th class="tt-seat">座號</th>${TT_TABLES.map(t => `<th>×${t}</th>`).join('')}</tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><th class="tt-seat">已背</th>${colCnt.map(n => `<td>${n}</td>`).join('')}</tr></tfoot>
+    </table></div>`;
+};
+async function ttToggle(seat, tbl) {
+  const rec = ttRec(), m = rec[seat] || (rec[seat] = {});
+  if (m[tbl]) {
+    if (!(await confirmBox('取消背誦紀錄？', `${pad(seat)} 號同學「×${tbl}」嘅通過紀錄（${m[tbl]}）會被刪除。`, '取消紀錄'))) return;
+    delete m[tbl]; if (!Object.keys(m).length) delete rec[seat];
+    save(); renderCenter(true); toast(`已取消 ${pad(seat)} 號 ×${tbl} 嘅紀錄`);
+  } else {
+    m[tbl] = hkToday(); save(); renderCenter(true); Sound.pop();
+  }
+}
+const TAB_IDS = ['clock', 'focus', 'pomodoro', 'homework', 'tables', 'picker'];
 function setMode(m) {
   if (!TAB_IDS.includes(m)) m = 'clock';
   state.mode = m; Timer.syncIdle(); save(); rememberView();
@@ -3251,7 +3305,7 @@ function onCenterClick(e) {
   if (b.dataset.wx) { state.weather.place = +b.dataset.wx; state.weather.err = false; save(); renderWx(); loadWeather(true); toast(`天氣地點：${WX_PLACES[state.weather.place][0]}`); return; }
   if (b.dataset.act === 'pkDraw') { drawNumber(); return; }
   if (b.dataset.act === 'pkReset') { if (!picking) { state.picker.drawn = []; pkLast = null; save(); updatePicker(); toast('已重新開始抽號'); } return; }
-  if (b.dataset.act === 'pkRepeat') { state.picker.noRepeat = !state.picker.noRepeat; save(); updatePicker(); return; }
+  if (b.dataset.act === 'pkRepeat') { state.picker.noRepeat = !state.picker.noRepeat; save(); updatePicker(); return; }  if (b.dataset.act === 'ttCell') { ttToggle(+b.dataset.seat, +b.dataset.tbl); return; }
   if (b.dataset.act === 'tzMenu') { tzMenuOpen = !tzMenuOpen; document.querySelector('.tz-menu')?.classList.toggle('open', tzMenuOpen); return; }
   if (b.dataset.pomo) { const [w, br] = b.dataset.pomo.split(',').map(Number); state.pomo = { work: w, brk: br }; Timer.syncIdle(); save(); renderCenter(); return; }
   switch (b.dataset.act) {
